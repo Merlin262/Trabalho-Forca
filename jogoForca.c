@@ -1,27 +1,63 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <stdlib.h>
-int erros;
 
-void forca()
+void inicio()
+{
+}
+
+void forca(int estado)
 { //função forca, serve para imprimir as chances do usuario a cada erro; argumento="estado"
-
-  int estado = erros;
 
   printf("  _______       \n");
   printf(" |/      |      \n");
   printf(" |      %c%c%c  \n", (estado >= 1 ? '(' : ' '), (estado >= 1 ? '_' : ' '), (estado >= 1 ? ')' : ' '));
-  printf(" |      %c%c%c  \n", (estado >= 3 ? '\\' : ' '), (estado >= 2 ? '|' : ' '), (estado >= 3 ? '/' : ' '));
+  printf(" |      %c%c%c  \n", (estado >= 3 ? '\\' : ' '), (estado >= 2 ? '|' : ' '), (estado >= 4 ? '/' : ' '));
   printf(" |       %c     \n", (estado >= 2 ? '|' : ' ')); // Usado função if else por ternário { Condicição ? se_vdd_realiza_isso : se_mentira_realiza_isso }
-  printf(" |      %c %c   \n", (estado >= 4 ? '/' : ' '), (estado >= 4 ? '\\' : ' '));
+  printf(" |      %c %c   \n", (estado >= 5 ? '/' : ' '), (estado >= 6 ? '\\' : ' '));
   printf(" |              \n");
   printf("_|___           \n");
   printf("\n\n");
+  printf("Você tem %d chances!", 6 - estado);
 }
+void escolhePalavra()
+{ //Será usado um arquivo .txt como armazenamento das palavras e níveis.
+  FILE *f;
+  for (int nv = 0; nv <= 5; ++nv)
+  {
+    nv == 1 ? f = fopen("/palavras/nv1.txt", "r+") : nv == 2 ? f = fopen("/palavras/nv2.txt", "r+")
+                                                 : nv == 3   ? f = fopen("/palavras/nv3.txt", "r+")
+                                                 : nv == 4   ? f = fopen("/palavras/nv4.txt", "r+")
+                                                 : nv == 5   ? f = fopen("/palavras/nv5.txt", "r+")
+                                                             : printf("%s", NULL);
+  }
+  if (f == NULL)
+  { // Se o banco de dados não for localizado, o programa irá encerrar.
+    printf("Banco de dados não localizado, tente novamente...\n");
+    exit(1);
+  }
 
+  /* Faz o programa buscar uma palavra qualquer do nível, e então
+seleciona uma dessas palavras como a palavra secreta. */
+  int quantidadeDePalavras;
+  fscanf(f, "%d", &quantidadeDePalavras); //Lê-se quantas palavras possuem dentro de uma linha
+
+  srand(time(0)); //Escolhe um número aleatório que não se repete;
+  int randomico = rand() % quantidadeDePalavras;
+
+  for (int i = 0; i <= randomico; i++)
+  {
+    fscanf(f, "%s", quantidadeDePalavras);
+  }
+
+  fclose(f); /* Com a palavra escolhida, se fecha a função, sendo 
+  utilizada caso necessário a escolha de uma nova para outro nível */
+}
 int main()
-{ //nivel 1
+{
+
+  //nivel 1
   printf("NIVEL 1:\n");
   char nivel1[] = "bola"; //palavra secreta
   printf("A palavra tem %lu caracteres", strlen(nivel1));
