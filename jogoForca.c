@@ -1,77 +1,22 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
+#include <stdlib.h>
+int erros;
 
-void forca(int estado){ //função forca, serve para imprimir as chances do usuario a cada erro; argumento="estado"
-  if(estado==0){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|");
-    printf("\n|");
-    printf("\n|");
-    printf("\n|");
-    printf("\n|");
-    printf("\n-");
-    printf("Você tem 6 chances");
-  } else if(estado==1){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|          0");
-    printf("\n|");
-    printf("\n|");
-    printf("\n|");
-    printf("\n|");
-    printf("\n-");
-    printf("Você tem 5 chances");
-  } else if(estado==2){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|          0");
-    printf("\n|          |");
-    printf("\n|");
-    printf("\n|");
-    printf("\n|");
-    printf("\n-");
-    printf("Você tem 4 chances");
-  } else if(estado==3){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|          0");
-    printf("\n|         /|");
-    printf("\n|           ");
-    printf("\n|");
-    printf("\n|");
-    printf("\n-");
-    printf("Você tem 3 chances");
-  } else if(estado==4){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|          0");
-    printf("\n|         /|\\");
-    printf("\n|           ");
-    printf("\n|");
-    printf("\n|");
-    printf("\n-");
-    printf("Você tem 2 chances");
-  } else if(estado==5){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|          0");
-    printf("\n|         /|\\");
-    printf("\n|         /  ");
-    printf("\n|");
-    printf("\n|");
-    printf("\n-");
-    printf("Você tem 1 chances");
-  } else if(estado==6){
-    printf("\n------------");
-    printf("\n|          |");
-    printf("\n|          0");
-    printf("\n|         /|\\");
-    printf("\n|         / \\ ");
-    printf("\n|");
-    printf("\n|    Perdeu, irmão!");
-    printf("\n-");
-  }
+void forca(){ //função forca, serve para imprimir as chances do usuario a cada erro; argumento="estado"
+
+  int estado = erros;
+
+  printf("  _______       \n");
+	printf(" |/      |      \n");
+	printf(" |      %c%c%c  \n", (estado>=1?'(':' '), (estado>=1?'_':' '), (estado>=1?')':' '));
+	printf(" |      %c%c%c  \n", (estado>=3?'\\':' '), (estado>=2?'|':' '), (estado>=3?'/': ' '));
+	printf(" |       %c     \n", (estado>=2?'|':' ')); // Usado função if else por ternário { Condicição ? se_vdd_realiza_isso : se_mentira_realiza_isso }
+	printf(" |      %c %c   \n", (estado>=4?'/':' '), (estado>=4?'\\':' '));
+	printf(" |              \n");
+	printf("_|___           \n");
+	printf("\n\n");
 }
 
 
