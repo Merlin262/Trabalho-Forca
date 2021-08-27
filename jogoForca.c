@@ -2,64 +2,136 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include "forca.h"
+void limpa_variaveis()
+{
+    scanf("%*[^\n]");
+    scanf("%*c");
+}
 
-#define tamanhoDaPalavra
-/* ::::::::: Variáveis :
-*/
-int nivelInicial = 0;
-char palavrasecreta[tamanhoDaPalavra];
-/* ::::::::: Programa :
-*/
+int ganhou()
+{
+    for (int i = 0; i < strlen(palavrasecreta); i++)
+    {
+        if (!jachutou(palavrasecreta[i]))
+        {
+            return 0;
+        }
+    }
 
-int erros;
+    return 1;
+}
+char escolhatentativa;
+
+int jachutou(char letra)
+{
+    int achou = 0;
+    for (int j = 0; j < chutesdados; j++)
+    {
+        if (chutes[j] == letra)
+        {
+            achou = 1;
+            break;
+        }
+    }
+
+    return achou;
+}
+
+void limparTela()
+{
+    system("cls");
+}
+
+int chuteserrados()
+{
+    int erros = 0;
+
+    for (int i = 0; i < chutesdados; i++)
+    {
+
+        if (!letraexiste(chutes[i]))
+        {
+            erros++;
+        }
+    }
+
+    return erros;
+}
 
 void forca()
 {
-    int estado = erros;
+
+    int erros = chuteserrados();
 
     printf("  _______       \n");
     printf(" |/      |      \n");
-    printf(" |      %c%c%c  \n", (estado >= 1 ? '(' : ' '), (estado >= 1 ? '_' : ' '), (estado >= 1 ? ')' : ' '));
-    printf(" |      %c%c%c  \n", (estado >= 3 ? '\\' : ' '), (estado >= 2 ? '|' : ' '), (estado >= 3 ? '/' : ' '));
-    printf(" |       %c     \n", (estado >= 2 ? '|' : ' ')); // Usado função if else por ternário { Condicição ? se_vdd_realiza_isso : se_mentira_realiza_isso }
-    printf(" |      %c %c   \n", (estado >= 4 ? '/' : ' '), (estado >= 4 ? '\\' : ' '));
+    printf(" |      %c%c%c  \n", (erros >= 1 ? '(' : ' '), (erros >= 1 ? '_' : ' '), (erros >= 1 ? ')' : ' '));
+    printf(" |      %c%c%c  \n", (erros >= 4 ? '\\' : ' '), (erros >= 2 ? '|' : ' '), (erros >= 3 ? '/' : ' '));
+    printf(" |       %c     \n", (erros >= 2 ? '|' : ' '));
+    printf(" |      %c %c   \n", (erros >= 5 ? '/' : ' '), (erros >= 6 ? '\\' : ' '));
     printf(" |              \n");
     printf("_|___           \n");
-    printf("\n\n");
+    printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
+
+    for (int i = 0; i < strlen(palavrasecreta); i++)
+    {
+
+        if (jachutou(palavrasecreta[i]))
+        {
+            printf("%c ", palavrasecreta[i]);
+        }
+        else
+        {
+            printf("_ ");
+        }
+    }
+    printf("\n");
+}
+int nivelamento(nivel)
+{
+    nivelAtual = 0;
+    switch (nivel + 1)
+    {
+    case 1:
+        nivelAtual = (rand() % 4);
+        break;
+
+    case 2:
+        nivelAtual = (5 + (rand() % 9));
+        break;
+
+    case 3:
+        nivelAtual = (10 + (rand() % 14));
+        break;
+
+    case 4:
+        nivelAtual = (15 + (rand() % 19));
+        break;
+
+    case 5:
+        nivelAtual = (20 + (rand() % 24));
+        break;
+    }
+
+    return nivelAtual;
 }
 
-int nivel(int nivelAtual)
-{
-    for (int i = 0, i < 5, i++)
-    {
-    }
-    return nivelAtual
-}
 void escolhepalavra()
 {
-    FILE *palavras; //faz o caminho para armazenar as palavras
+    FILE *palavras;
 
-    palavras = fopen("palavras.txt", "r"); // Diz que a variável palavras irá abrir e somente ler o arquivo "palavras.txt"
+    palavras = fopen("palavras.txt", "r+");
     if (palavras == 0)
-    { //Se não existir esse arquivo, irá gerar uma mensagem dizendo o erro.
-        printf("Banco de dados de palavras não disponível\n\n");
+    {
+        printf("Banco de dados das palavras nao foi encontrado!\n\n");
         exit(1);
     }
 
-    int qtddepalavras;                      //Criado uma variável para armazenar a quantidade de palavras que tem no arquivo
-    fscanf(palavras, "%d", &qtddepalavras); //Aqui diz para buscar/procurar quantas palavras tem no arquivo "palavras.txt"
+    fscanf(palavras, "%d", &quantidadeDePalavras);
 
-    srand(time(0));
-    /*
-    Definido a randomização das palavras, que diz que nunca irá se repetir o seed, 
-    então irá buscar sempre um número novo e não 'repetível'
-    */
+    int randomico = nivelamento(nivelAtual);
 
-    int randomico = rand() % qtddepalavras;
-    /*
-    Definido a variável "randômico", que indica que irá buscar um número (palavra nova) 
-    qualquer dentro da quantidade de palavras existentes em "palavras.txt"
-    */
     for (int i = 0; i <= randomico; i++)
     {
         fscanf(palavras, "%s", palavrasecreta);
@@ -67,300 +139,89 @@ void escolhepalavra()
 
     fclose(palavras);
 }
-int main()
-{ //nivel 1
-    printf("NIVEL 1:\n");
 
-    //palavra secreta
-    printf("A palavra tem %lu caracteres", strlen(nivel[0].palavra));
+int letraexiste(char letra)
+{
 
-    char p_tela[100];       //palavra para tela
-    strcpy(p_tela, nivel1); //copia o nivel1 em p_tela
-    //substitui letras por '_'
-    for (int i = 0; i < strlen(p_tela); i++)
+    for (int j = 0; j < strlen(palavrasecreta); j++)
     {
-        p_tela[i] = '_';
+        if (letra == palavrasecreta[j])
+        {
+            return 1;
+        }
     }
 
-    int erros = 0;
-    while (1)
-    {
-        //imprimir a forca
-        forca(erros);
-        //imprimir os underline '_' para cada letra da palavra, ou seja, imprimir p_tela
-        printf("\nAdivinhe: ");
-        for (int i = 0; i < strlen(p_tela); i++)
-        {
-            printf("%c ", p_tela[i]);
-        }
-        //recebe a letra
-        printf("\nLetra: ");
-        char letra;
-        scanf(" %c", &letra);
-        //se letra correta atualiza palavra na tela
-        //verifica se a letra esta correta
-        int sera_que_errou = 1; //1=sim 0=nao
-        for (int i = 0; i < strlen(p_tela); i++)
-        {
-            if (letra == nivel1[i])
-            { //certo
-                p_tela[i] = letra;
-                sera_que_errou = 0;
-            }
-        }
-        //senao, incrementa erros
-        if (sera_que_errou == 1)
-        {
-            erros++;
-        }
-        //verifica se o jogo acabou
-        //verifica se ganhou
-        //verifica se a palavra é igual a p_tela
-        if (strcmp(p_tela, nivel1) == 0)
-        {
-            //ENTAO ganhou
-            printf("\nAcertou: ");
-            printf("%s ", nivel1);
-            printf("\nVocê Venceu o Nivel 1! Parabéns!!!");
-
-            //apartir deste ponto, é apenas uma repetição, mudando a palavra a cada nivel
-
-            printf("\nNIVEL 2:\n");
-            char nivel2[] = "abacate";
-            printf("A palavra tem %lu caracteres", strlen(nivel2));
-
-            char p_tela[100];
-            strcpy(p_tela, nivel2);
-
-            for (int i = 0; i < strlen(p_tela); i++)
-            {
-                p_tela[i] = '_';
-            }
-
-            int erros = 0;
-            while (1)
-            {
-
-                forca(erros);
-
-                printf("\nAdivinhe: ");
-                for (int i = 0; i < strlen(p_tela); i++)
-                {
-                    printf("%c ", p_tela[i]);
-                }
-                printf("\nLetra: ");
-                char letra;
-                scanf(" %c", &letra);
-                int sera_que_errou = 1;
-                for (int i = 0; i < strlen(p_tela); i++)
-                {
-                    if (letra == nivel2[i])
-                    {
-                        p_tela[i] = letra;
-                        sera_que_errou = 0;
-                    }
-                }
-                if (sera_que_errou == 1)
-                {
-                    erros++;
-                }
-
-                if (strcmp(p_tela, nivel2) == 0)
-                {
-                    printf("\nAcertou: ");
-                    printf("%s ", nivel2);
-                    printf("\nVocê Venceu o Nivel 2! Parabéns!!!");
-
-                    printf("\nNIVEL 3:\n");
-                    char nivel3[] = "paralelo";
-                    printf("A palavra tem %lu caracteres", strlen(nivel3));
-
-                    char p_tela[100];
-                    strcpy(p_tela, nivel3);
-
-                    for (int i = 0; i < strlen(p_tela); i++)
-                    {
-                        p_tela[i] = '_';
-                    }
-
-                    int erros = 0;
-                    while (1)
-                    {
-                        forca(erros);
-
-                        printf("\nAdivinhe: ");
-                        for (int i = 0; i < strlen(p_tela); i++)
-                        {
-                            printf("%c ", p_tela[i]);
-                        }
-                        printf("\nLetra: ");
-                        char letra;
-                        scanf(" %c", &letra);
-                        int sera_que_errou = 1;
-                        for (int i = 0; i < strlen(p_tela); i++)
-                        {
-                            if (letra == nivel3[i])
-                            {
-                                p_tela[i] = letra;
-                                sera_que_errou = 0;
-                            }
-                        }
-                        if (sera_que_errou == 1)
-                        {
-                            erros++;
-                        }
-
-                        if (strcmp(p_tela, nivel3) == 0)
-                        {
-                            printf("\nAcertou: ");
-                            printf("%s ", nivel3);
-                            printf("\nVocê Venceu o Nivel 3! Parabéns!!!");
-
-                            printf("\nNIVEL 4:\n");
-                            char nivel4[] = "paralelepipedo";
-                            printf("A palavra tem %lu caracteres", strlen(nivel4));
-
-                            char p_tela[100];
-                            strcpy(p_tela, nivel4);
-
-                            for (int i = 0; i < strlen(p_tela); i++)
-                            {
-                                p_tela[i] = '_';
-                            }
-
-                            int erros = 0;
-                            while (1)
-                            {
-
-                                forca(erros);
-
-                                printf("\nAdivinhe: ");
-                                for (int i = 0; i < strlen(p_tela); i++)
-                                {
-                                    printf("%c ", p_tela[i]);
-                                }
-
-                                printf("\nLetra: ");
-                                char letra;
-                                scanf(" %c", &letra);
-                                int sera_que_errou = 1;
-                                for (int i = 0; i < strlen(p_tela); i++)
-                                {
-                                    if (letra == nivel4[i])
-                                    {
-                                        p_tela[i] = letra;
-                                        sera_que_errou = 0;
-                                    }
-                                }
-
-                                if (sera_que_errou == 1)
-                                {
-                                    erros++;
-                                }
-
-                                if (strcmp(p_tela, nivel4) == 0)
-                                {
-                                    printf("\nAcertou: ");
-                                    printf("%s ", nivel4);
-                                    printf("\nVocê Venceu o Nivel 4! Parabéns!!!");
-
-                                    printf("\nNIVEL 5:\n");
-                                    char nivel5[] = "calculodiferencialintegral";
-                                    printf("A palavra tem %lu caracteres", strlen(nivel5));
-
-                                    char p_tela[100];
-                                    strcpy(p_tela, nivel5);
-
-                                    for (int i = 0; i < strlen(p_tela); i++)
-                                    {
-                                        p_tela[i] = '_';
-                                    }
-
-                                    int erros = 0;
-                                    while (1)
-                                    {
-
-                                        forca(erros);
-
-                                        printf("\nAdivinhe: ");
-                                        for (int i = 0; i < strlen(p_tela); i++)
-                                        {
-                                            printf("%c ", p_tela[i]);
-                                        }
-
-                                        printf("\nLetra: ");
-                                        char letra;
-                                        scanf(" %c", &letra);
-                                        int sera_que_errou = 1;
-                                        for (int i = 0; i < strlen(p_tela); i++)
-                                        {
-                                            if (letra == nivel5[i])
-                                            {
-                                                p_tela[i] = letra;
-                                                sera_que_errou = 0;
-                                            }
-                                        }
-
-                                        if (sera_que_errou == 1)
-                                        {
-                                            erros++;
-                                        }
-
-                                        if (strcmp(p_tela, nivel5) == 0)
-                                        {
-                                            printf("\nAcertou: ");
-                                            printf("%s ", nivel5);
-                                            printf("\nVocê Venceu o Nivel 5! Parabéns!!!");
-                                            break;
-                                        }
-
-                                        //verifica se perdeu
-                                        else if (erros == 6)
-                                        {
-                                            //perdeu
-                                            forca(erros);
-
-                                            break;
-                                        }
-                                    }
-                                }
-
-                                else if (erros == 6)
-                                {
-                                    forca(erros);
-
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (erros == 6)
-                        {
-                            forca(erros);
-                            break;
-                        }
-                    }
-                }
-
-                if (erros == 6)
-                {
-                    forca(erros);
-                    break;
-                }
-            }
-        }
-
-        if (erros == 6)
-        {
-            forca(erros);
-            break;
-        }
-    }
     return 0;
 }
 
-// FUNSÕES USADAS: strcpy() A função strcpy() copia a string-origem para a string- destino
+void chuta()
+{
+    char chute;
+    printf("\nQual letra? ");
+    scanf(" %c", &chute);
 
-//A função strlen() retorna o comprimento da string fornecida.
+    if (letraexiste(chute))
+    {
+        printf("Voce acertou: a palavra tem a letra %c\n\n", chute);
+    }
+    else
+    {
+        printf("\nVoce errou: a palavra NAO tem a letra %c\n\n", chute);
+    }
 
-//A função strcmp() compara a string 1 com a string 2. Se as duas forem idênticas a função retorna zero. Se elas forem diferentes a função retorna não-zero.
+    chutes[chutesdados] = chute;
+    chutesdados++;
+}
+
+//
+
+void comeco()
+{
+    printf("\n~~~~ JOGO DA FORCA ~~~~\n");
+}
+void mostrarNivel()
+{
+    printf("\nAgora voce esta no nivel %d \n\n", nivelAtual);
+}
+// ### 		Limite de erros para perder    ###
+
+int enforcou()
+{
+    return chuteserrados() >= 7;
+}
+
+// ###          Função principal           ###
+
+int main()
+{
+    for (nivelAtual = 0; nivelAtual < 5; nivelAtual++)
+    {
+        do
+        {
+            comeco();
+            mostrarNivel();
+            escolhepalavra();
+
+            do
+            {
+                forca();
+                chuta();
+                limparTela();
+
+            } while (!ganhou() && !enforcou());
+            if (ganhou())
+            {
+                printf("\n### Parabens! voce acertou a palavra. ###\n");
+                printf("\nA palavra certa eh %s\n\n \n", palavrasecreta);
+            }
+            else
+            {
+                printf("Perdeu ;-;, a palavra certa era \" %s \".", palavrasecreta);
+            }
+
+        escolha:
+            printf("\nQuer tentar novamente?\nDigite \"S\"  para tentar novamente ou \"N\" para finalizar \n");
+            scanf("%s", &escolhatentativa);
+        } while ((escolhatentativa == 'n') || (escolhatentativa == 'N'));
+    }
+}
