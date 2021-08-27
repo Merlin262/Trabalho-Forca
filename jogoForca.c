@@ -2,17 +2,17 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
-int erros;
-/* LOG:
-O que tenho que fazer?
-[] - Preciso criar uma função de nível
-    :: Pois assim no loop principal, se o usuário acertar a palavra, ele vai avançando de nível;
-    :: até chegar no último nível. Essa função tem que estar inserida na outra função ""void escolhepalavra()"";
-
+/* ::::::::: Variáveis :
 */
-void forca()
-{ //função forca, serve para imprimir as chances do usuario a cada erro; argumento="estado"
+int nivelInicial = 0;
 
+/* ::::::::: Programa :
+*/
+
+int erros;
+
+void forca()
+{
     int estado = erros;
 
     printf("  _______       \n");
@@ -25,7 +25,8 @@ void forca()
     printf("_|___           \n");
     printf("\n\n");
 }
-int nivel = 0 int nivel(int nivelAtual)
+
+int nivel(int nivelAtual)
 {
     for (int i = 0, i < 5, i++)
     {
