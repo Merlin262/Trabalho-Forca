@@ -3,7 +3,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define tamanhoDaPalavra 
+#define tamanhoDaPalavra
 /* ::::::::: Variáveis :
 */
 int nivelInicial = 0;
@@ -70,7 +70,7 @@ void escolhepalavra()
 int main()
 { //nivel 1
     printf("NIVEL 1:\n");
-    
+
     //palavra secreta
     printf("A palavra tem %lu caracteres", strlen(nivel[0].palavra));
 
