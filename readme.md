@@ -1,3 +1,4 @@
 ## Coisas a serem feitas:
 
-- [] dsdsd
+<input type="checkbox" disabled checked /> works <br>
+<input type="checkbox" disabled /> works here too <br>
