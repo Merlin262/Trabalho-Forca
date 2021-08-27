@@ -3,7 +3,13 @@
 #include <time.h>
 #include <stdlib.h>
 int erros;
+/* LOG:
+O que tenho que fazer?
+[] - Preciso criar uma função de nível
+    :: Pois assim no loop principal, se o usuário acertar a palavra, ele vai avançando de nível;
+    :: até chegar no último nível. Essa função tem que estar inserida na outra função ""void escolhepalavra()"";
 
+*/
 void forca()
 { //função forca, serve para imprimir as chances do usuario a cada erro; argumento="estado"
 
@@ -19,12 +25,50 @@ void forca()
     printf("_|___           \n");
     printf("\n\n");
 }
+int nivel = 0 int nivel(int nivelAtual)
+{
+    for (int i = 0, i < 5, i++)
+    {
+    }
+    return nivelAtual
+}
+void escolhepalavra()
+{
+    FILE *palavras; //faz o caminho para armazenar as palavras
 
+    palavras = fopen("palavras.txt", "r"); // Diz que a variável palavras irá abrir e somente ler o arquivo "palavras.txt"
+    if (palavras == 0)
+    { //Se não existir esse arquivo, irá gerar uma mensagem dizendo o erro.
+        printf("Banco de dados de palavras não disponível\n\n");
+        exit(1);
+    }
+
+    int qtddepalavras;                      //Criado uma variável para armazenar a quantidade de palavras que tem no arquivo
+    fscanf(palavras, "%d", &qtddepalavras); //Aqui diz para buscar/procurar quantas palavras tem no arquivo "palavras.txt"
+
+    srand(time(0));
+    /*
+    Definido a randomização das palavras, que diz que nunca irá se repetir o seed, 
+    então irá buscar sempre um número novo e não 'repetível'
+    */
+
+    int randomico = rand() % qtddepalavras;
+    /*
+    Definido a variável "randômico", que indica que irá buscar um número (palavra nova) 
+    qualquer dentro da quantidade de palavras existentes em "palavras.txt"
+    */
+    for (int i = 0; i <= randomico; i++)
+    {
+        fscanf(palavras, "%s", palavrasecreta);
+    }
+
+    fclose(palavras);
+}
 int main()
 { //nivel 1
     printf("NIVEL 1:\n");
-    char nivel1[] = "bola"; //palavra secreta
-    printf("A palavra tem %lu caracteres", strlen(nivel1));
+    //palavra secreta
+    printf("A palavra tem %lu caracteres", strlen(nivel[0].palavra));
 
     char p_tela[100];       //palavra para tela
     strcpy(p_tela, nivel1); //copia o nivel1 em p_tela
